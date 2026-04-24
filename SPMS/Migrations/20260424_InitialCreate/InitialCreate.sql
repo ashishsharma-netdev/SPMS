@@ -1,0 +1,64 @@
+-- InitialCreate migration placeholder
+-- Use 'dotnet ef migrations add InitialCreate' locally to generate full migration files.
+-- This file is a placeholder representing expected schema for reference.
+
+CREATE TABLE Users (
+ Id UNIQUEIDENTIFIER PRIMARY KEY,
+ Name NVARCHAR(200) NOT NULL,
+ Email NVARCHAR(200) NOT NULL,
+ PasswordHash NVARCHAR(MAX) NOT NULL,
+ Role INT NOT NULL
+);
+
+CREATE TABLE ParkingSpaces (
+ ParkingSpaceId UNIQUEIDENTIFIER PRIMARY KEY,
+ OwnerId UNIQUEIDENTIFIER NULL,
+ Name NVARCHAR(200) NOT NULL,
+ Latitude FLOAT NOT NULL,
+ Longitude FLOAT NOT NULL,
+ Address NVARCHAR(500) NULL,
+ TotalSlots INT NOT NULL,
+ AvailableSlots INT NOT NULL,
+ AreaInSqFt FLOAT NULL,
+ StartDate DATETIME2 NULL,
+ EndDate DATETIME2 NULL,
+ IsActive BIT NOT NULL
+);
+
+CREATE TABLE ParkingSlots (
+ SlotId UNIQUEIDENTIFIER PRIMARY KEY,
+ ParkingSpaceId UNIQUEIDENTIFIER NOT NULL,
+ SlotNumber INT NOT NULL,
+ SlotType INT NOT NULL,
+ IsOccupied BIT NOT NULL,
+ RowVersion ROWVERSION NOT NULL
+);
+
+CREATE TABLE Bookings (
+ BookingId UNIQUEIDENTIFIER PRIMARY KEY,
+ UserId UNIQUEIDENTIFIER NOT NULL,
+ ParkingSpaceId UNIQUEIDENTIFIER NOT NULL,
+ SlotId UNIQUEIDENTIFIER NULL,
+ BookingType INT NOT NULL,
+ StartTime DATETIME2 NOT NULL,
+ EndTime DATETIME2 NOT NULL,
+ Status INT NOT NULL,
+ Amount DECIMAL(18,2) NOT NULL
+);
+
+CREATE TABLE Payments (
+ PaymentId UNIQUEIDENTIFIER PRIMARY KEY,
+ BookingId UNIQUEIDENTIFIER NOT NULL,
+ Amount DECIMAL(18,2) NOT NULL,
+ PaymentMethod NVARCHAR(100) NULL,
+ Status INT NOT NULL,
+ TransactionId NVARCHAR(200) NULL
+);
+
+CREATE TABLE ParkingLogs (
+ ParkingLogId UNIQUEIDENTIFIER PRIMARY KEY,
+ BookingId UNIQUEIDENTIFIER NOT NULL,
+ EntryTime DATETIME2 NOT NULL,
+ ExitTime DATETIME2 NULL,
+ CheckCode NVARCHAR(50) NULL
+);
