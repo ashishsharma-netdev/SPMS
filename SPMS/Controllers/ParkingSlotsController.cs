@@ -34,14 +34,20 @@ namespace SPMS.Controllers
  }
 
  [HttpGet("by-parking/{parkingId}")]
- public async Task<IActionResult> ByParking(Guid parkingId) => Ok(_mapper.Map<List<ParkingSlotResponseDto>>(await _db.ParkingSlots.Where(s => s.ParkingSpaceId == parkingId).ToListAsync()));
+ public async Task<IActionResult> ByParking(Guid parkingId)
+ {
+ var items = await _db.ParkingSlots.Where(s => s.ParkingSpaceId == parkingId).ToListAsync();
+ if (!items.Any()) return NotFound();
+ return Ok(_mapper.Map<List<ParkingSlotResponseDto>>(items));
+ }
 
  [HttpGet("available")]
  public async Task<IActionResult> Available(Guid parkingId, SlotType? type = null)
  {
  var q = _db.ParkingSlots.Where(s => s.ParkingSpaceId == parkingId && !s.IsOccupied);
  if (type.HasValue) q = q.Where(s => s.SlotType == type.Value);
- return Ok(await q.ToListAsync());
+ var list = await q.ToListAsync();
+ return Ok(_mapper.Map<List<ParkingSlotResponseDto>>(list));
  }
 
  [HttpPut("{id}")]

@@ -30,7 +30,11 @@ namespace SPMS.Controllers
  }
 
  [HttpGet]
- public async Task<IActionResult> GetAll() => Ok(await _db.ParkingSpaces.ToListAsync());
+ public async Task<IActionResult> GetAll()
+ {
+ var list = await _db.ParkingSpaces.ToListAsync();
+ return Ok(_mapper.Map<List<ParkingSpaceResponseDto>>(list));
+ }
 
  [HttpGet("search")]
  public async Task<IActionResult> Search([FromQuery] double lat, [FromQuery] double lng, [FromQuery] double radiusKm =5)
@@ -42,7 +46,12 @@ namespace SPMS.Controllers
  }
 
  [HttpGet("{id}")]
- public async Task<IActionResult> GetById(Guid id) => Ok(await _db.ParkingSpaces.FindAsync(id));
+ public async Task<IActionResult> GetById(Guid id)
+ {
+ var p = await _db.ParkingSpaces.FindAsync(id);
+ if (p == null) return NotFound();
+ return Ok(_mapper.Map<ParkingSpaceResponseDto>(p));
+ }
 
  private static double Distance(double lat1, double lon1, double lat2, double lon2)
  {

@@ -43,6 +43,17 @@ namespace SPMS.Services
  try
  {
  var evt = EventUtility.ConstructEvent(json, sig, secret);
+ return await ProcessEvent(evt);
+ }
+ catch (Exception ex)
+ {
+ return new { error = ex.Message };
+ }
+ }
+
+ // Separated for unit testing: process a Stripe event object
+ public async Task<object> ProcessEvent(Event evt)
+ {
  if (evt.Type == Events.PaymentIntentSucceeded)
  {
  var pi = evt.Data.Object as PaymentIntent;
@@ -51,15 +62,17 @@ namespace SPMS.Services
  if (paymentId != Guid.Empty)
  {
  var p = await _db.Payments.FirstOrDefaultAsync(x => x.PaymentId == paymentId);
- if (p != null) { p.Status = PaymentStatus.Success; p.TransactionId = pi.Id; var booking = await _db.Bookings.FindAsync(p.BookingId); if (booking != null) booking.Status = BookingStatus.Active; await _db.SaveChangesAsync(); }
+ if (p != null)
+ {
+ p.Status = PaymentStatus.Success;
+ p.TransactionId = pi.Id;
+ var booking = await _db.Bookings.FindAsync(p.BookingId);
+ if (booking != null) booking.Status = BookingStatus.Active;
+ await _db.SaveChangesAsync();
+ }
  }
  }
  return new { received = true };
- }
- catch (Exception ex)
- {
- return new { error = ex.Message };
- }
  }
  }
 }

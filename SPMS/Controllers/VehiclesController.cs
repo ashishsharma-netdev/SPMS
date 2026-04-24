@@ -40,7 +40,12 @@ namespace SPMS.Controllers
 
  [HttpGet("{id}")]
  [Authorize]
- public async Task<IActionResult> GetById(Guid id) => Ok(await _db.Vehicles.FindAsync(id));
+ public async Task<IActionResult> GetById(Guid id)
+ {
+ var v = await _db.Vehicles.FindAsync(id);
+ if (v == null) return NotFound();
+ return Ok(_mapper.Map<VehicleResponseDto>(v));
+ }
 
  [HttpPut("{id}")]
  [Authorize]
