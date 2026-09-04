@@ -1,0 +1,21 @@
+@model SPMS.Models.Student
+@{ ViewData["Title"] = "Edit Student"; }
+<div class="container py-4"><div class="row justify-content-center"><div class="col-lg-9">
+<div class="mb-4"><h1 class="fw-bold">Edit Student</h1><p class="text-muted">Update registration information.</p></div>
+<form asp-action="Edit" method="post" class="card shadow-sm border-0"><div class="card-body p-4"><input asp-for="Id" type="hidden" /><input asp-for="RegistrationDate" type="hidden" />
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div><div class="row g-3">
+<div class="col-md-6"><label asp-for="FirstName" class="form-label"></label><input asp-for="FirstName" class="form-control" /><span asp-validation-for="FirstName" class="text-danger"></span></div>
+<div class="col-md-6"><label asp-for="LastName" class="form-label"></label><input asp-for="LastName" class="form-control" /><span asp-validation-for="LastName" class="text-danger"></span></div>
+<div class="col-md-6"><label asp-for="Email" class="form-label"></label><input asp-for="Email" type="email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
+<div class="col-md-6"><label asp-for="Mobile" class="form-label"></label><input asp-for="Mobile" class="form-control" /><span asp-validation-for="Mobile" class="text-danger"></span></div>
+<div class="col-md-4"><label asp-for="DateOfBirth" class="form-label"></label><input asp-for="DateOfBirth" type="date" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="Gender" class="form-label"></label><select asp-for="Gender" class="form-select"><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div class="col-md-4"><label asp-for="Course" class="form-label"></label><select asp-for="Course" class="form-select"><option>BCA</option><option>B.Tech</option><option>MCA</option><option>MBA</option><option>BBA</option><option>M.Com</option></select></div>
+<div class="col-12"><label asp-for="Address" class="form-label"></label><textarea asp-for="Address" class="form-control" rows="2"></textarea></div>
+<div class="col-md-4"><label asp-for="City" class="form-label"></label><input asp-for="City" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="State" class="form-label"></label><input asp-for="State" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="Pincode" class="form-label"></label><input asp-for="Pincode" class="form-control" maxlength="6" /></div>
+<div class="col-12"><div class="form-check"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Active student</label></div></div>
+</div></div><div class="card-footer bg-white p-4 d-flex gap-2"><button class="btn btn-primary">Save Changes</button><a asp-action="Index" class="btn btn-outline-secondary">Cancel</a></div></form>
+</div></div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
